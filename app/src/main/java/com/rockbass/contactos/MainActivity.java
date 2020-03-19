@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             View view = holder.itemView;
+
             Persona persona = Memory.PERSONAS.get(position);
 
             TextView nombreCompleto, edad, telefono, email;
@@ -78,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
             telefono.setText(persona.telefono);
 
             email.setText(persona.email);
+
+            view.setOnClickListener(
+                    (v)->{
+                        Intent intent = new Intent(MainActivity.this, ModificarActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("Posicion",position);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+            );
         }
 
         @Override
