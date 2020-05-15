@@ -1,4 +1,4 @@
-package com.rockbass.contactos;
+package com.rockbass.contactos.bd;
 
 import android.provider.BaseColumns;
 
