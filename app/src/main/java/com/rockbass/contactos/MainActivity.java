@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Person;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private BaseDeDatosHelper baseDeDatosHelper;
-   // private AdapterPersona adapterPersona;
+    private AdapterPersona adapterPersona;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +38,19 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
 
-        baseDeDatosHelper = new BaseDeDatosHelper(this);
-
-        //adapterPersona = new AdapterPersona();
-
+        baseDeDatosHelper = new BaseDeDatosHelper(MainActivity.this);
+        adapterPersona = new AdapterPersona();
+        consultarContactos();
         RecyclerView recyclerView = findViewById(R.id.recyclerview_contactos);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-       // recyclerView.setAdapter(adapterPersona);
+        recyclerView.setAdapter(adapterPersona);
+
     }
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
+
+    private void consultarContactos() {
 
         SQLiteDatabase db = baseDeDatosHelper.getReadableDatabase();
-        String[] columnas = new String[]{
+        String[] columnas = {
                 ContactosContract.ContactoEntry._ID,
                 ContactosContract.ContactoEntry.COLUMNA_NOMBRE,
                 ContactosContract.ContactoEntry.COLUMNA_APELLIDO_PATERNO,
@@ -59,16 +58,25 @@ public class MainActivity extends AppCompatActivity {
                 ContactosContract.ContactoEntry.COLUMNA_TELEFONO,
                 ContactosContract.ContactoEntry.COLUMNA_EDAD,
                 ContactosContract.ContactoEntry.COLUMNA_EMAIL,
-                ContactosContract.ContactoEntry.COLUMNA_CONTACTO,
         };
-        Cursor cursor = db.query(ContactosContract.ContactoEntry.NOMBRE_TABLA, columnas,
-                null,null,null,null,null);
+        Cursor cursor = db.query(ContactosContract.ContactoEntry.NOMBRE_TABLA,
+                columnas,
+                null,
+                null,
+                null,
+                null,
+                null);
 
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
+            return;
+        }
         List<Persona> personas = new ArrayList<>();
-
-        while(cursor.moveToFirst()){
+        do{
             Persona persona = new Persona();
 
+            persona.id = cursor.getInt(cursor.getColumnIndex(ContactosContract.ContactoEntry._ID));
             persona.nombre = cursor.getString(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_NOMBRE));
             persona.apellidoPaterno = cursor.getString(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_APELLIDO_PATERNO));
             persona.apellidoMaterno = cursor.getString(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_APELLIDO_MATERNO));
@@ -77,12 +85,19 @@ public class MainActivity extends AppCompatActivity {
             persona.email = cursor.getString(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_EMAIL));
 
             personas.add(persona);
-        }
-
+        }while(cursor.moveToNext());
         cursor.close();
 
         adapterPersona.setData(personas);
         adapterPersona.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        consultarContactos();
+
     }
     @Override
     protected void onStop() {
@@ -140,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
             email.setText(persona.email);
 
-           /* view.setOnClickListener(
+            view.setOnClickListener(
                     (v)->{
                         Intent intent = new Intent(MainActivity.this, ModificarActivity.class);
                         Bundle bundle = new Bundle();
@@ -155,5 +170,5 @@ public class MainActivity extends AppCompatActivity {
         public int getItemCount() {
             return personas.size();
         }
-    }*/
+    }
 }

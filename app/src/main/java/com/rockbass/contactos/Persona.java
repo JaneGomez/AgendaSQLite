@@ -1,6 +1,7 @@
 package com.rockbass.contactos;
 
 public class Persona {
+    public int id;
     public String nombre;
     public String apellidoPaterno, apellidoMaterno;
     public int edad;
@@ -10,7 +11,8 @@ public class Persona {
 
     public Persona(){}
 
-    public Persona(String nombre,String apellidoPaterno,String apellidoMaterno,int edad,String telefono,String email,int contacto){
+    public Persona(int id,String nombre,String apellidoPaterno,String apellidoMaterno,int edad,String telefono,String email,int contacto){
+        setId(id);
         setNombre(nombre);
         setApellidoPaterno(apellidoPaterno);
         setApellidoMaterno(apellidoMaterno);
@@ -19,6 +21,12 @@ public class Persona {
         setEmail(email);
         setContacto(contacto);
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() { return id; }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
