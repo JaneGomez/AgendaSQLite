@@ -31,7 +31,7 @@ public class RegistrarActivity extends AppCompatActivity {
     private BaseDeDatosHelper baseDeDatosHelper;
     ArrayList<String> listaSpinner;
     ArrayList<Persona> personaList;
-    private int idContacto;
+    private int idContacto = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +80,8 @@ public class RegistrarActivity extends AppCompatActivity {
                     values.put(ContactosContract.ContactoEntry.COLUMNA_EDAD, edad);
                     values.put(ContactosContract.ContactoEntry.COLUMNA_EMAIL, email);
 
-                    if(spinnerContacto.getCount()<0){
-                    values.put(ContactosContract.ContactoEntry.COLUMNA_CONTACTO,idContacto);}
-
-                   long id = db.insertOrThrow(ContactosContract.ContactoEntry.NOMBRE_TABLA,null, values);
-                    Toast.makeText(getApplicationContext(),"Id registro: "+ id,Toast.LENGTH_SHORT).show();
+                    long id = db.insert(ContactosContract.ContactoEntry.NOMBRE_TABLA, null, values);Toast.makeText(getApplicationContext(), "Id registro: " + id, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Id registro: " + id, Toast.LENGTH_SHORT).show();
                     db.close();
 
                     finish();
