@@ -31,7 +31,7 @@ public class RegistrarActivity extends AppCompatActivity {
     private BaseDeDatosHelper baseDeDatosHelper;
     ArrayList<String> listaSpinner;
     ArrayList<Persona> personaList;
-    private int idContacto = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,18 +48,6 @@ public class RegistrarActivity extends AppCompatActivity {
         spinnerContacto = findViewById(R.id.spinnerContacto);
         consultarContactos();
 
-        spinnerContacto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                idContacto = parent.getSelectedItemPosition();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         FloatingActionButton fabRegistrar = findViewById(R.id.fab_registrar);
         fabRegistrar.setOnClickListener(
                 view->{
@@ -71,6 +59,8 @@ public class RegistrarActivity extends AppCompatActivity {
                     String telefono = editTextTelefono.getText().toString();
                     int edad = Integer.parseInt(editTextEdad.getText().toString());
                     String email = editTextEmail.getText().toString();
+                    int contacto = spinnerContacto.getSelectedItemPosition();
+                    if(contacto == -1){contacto = 0;}
 
                     ContentValues values = new ContentValues();
                     values.put(ContactosContract.ContactoEntry.COLUMNA_NOMBRE, nombre);
@@ -79,8 +69,9 @@ public class RegistrarActivity extends AppCompatActivity {
                     values.put(ContactosContract.ContactoEntry.COLUMNA_TELEFONO, telefono);
                     values.put(ContactosContract.ContactoEntry.COLUMNA_EDAD, edad);
                     values.put(ContactosContract.ContactoEntry.COLUMNA_EMAIL, email);
+                    values.put(ContactosContract.ContactoEntry.COLUMNA_CONTACTO, contacto);
 
-                    long id = db.insert(ContactosContract.ContactoEntry.NOMBRE_TABLA, null, values);Toast.makeText(getApplicationContext(), "Id registro: " + id, Toast.LENGTH_SHORT).show();
+                    long id = db.insert(ContactosContract.ContactoEntry.NOMBRE_TABLA, null, values);
                     Toast.makeText(getApplicationContext(), "Id registro: " + id, Toast.LENGTH_SHORT).show();
                     db.close();
 

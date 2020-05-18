@@ -1,4 +1,4 @@
-#Fri May 15 23:42:32 MDT 2020
+#Sun May 17 23:00:33 MDT 2020
 base.0=C\:\\android-sdk\\Agenda\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
 path.1=classes.dex
 renamed.1=classes2.dex

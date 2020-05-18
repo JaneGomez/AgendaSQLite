@@ -25,10 +25,11 @@ public class ModificarActivity extends AppCompatActivity {
     EditText editTextNombre, editTextApellidoPaterno, editTextApellidoMaterno,
             editTextEdad, editTextTelefono, editTextEmail;
     Spinner spinnerContacto;
-    int idContacto, position, idModificar;
+    int position, idModificar;
     private BaseDeDatosHelper baseDeDatosHelper;
     ArrayList<String> listaSpinner;
     ArrayList<Persona> personaList;
+    Persona p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +45,6 @@ public class ModificarActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         spinnerContacto = (Spinner) findViewById(R.id.spinnerContacto);
         consultarContactos();
-        spinnerContacto.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                idContacto = parent.getSelectedItemPosition();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         FloatingActionButton fabModificar = findViewById(R.id.fab_modificar);
         fabModificar.setOnClickListener(
@@ -67,6 +57,9 @@ public class ModificarActivity extends AppCompatActivity {
                     String telefono = editTextTelefono.getText().toString();
                     int edad = Integer.parseInt(editTextEdad.getText().toString());
                     String email = editTextEmail.getText().toString();
+                    int contacto = spinnerContacto.getSelectedItemPosition();
+                    if(contacto == 0){
+                        contacto = p.contacto;}
 
                     ContentValues values = new ContentValues();
                     values.put(ContactosContract.ContactoEntry.COLUMNA_NOMBRE, nombre);
@@ -75,6 +68,7 @@ public class ModificarActivity extends AppCompatActivity {
                     values.put(ContactosContract.ContactoEntry.COLUMNA_TELEFONO, telefono);
                     values.put(ContactosContract.ContactoEntry.COLUMNA_EDAD, edad);
                     values.put(ContactosContract.ContactoEntry.COLUMNA_EMAIL, email);
+                    values.put(ContactosContract.ContactoEntry.COLUMNA_CONTACTO, contacto);
 
                     db.update(ContactosContract.ContactoEntry.NOMBRE_TABLA,values,"_id="+idModificar,null);
                     Toast.makeText(getApplicationContext(), "Contacto modificado ", Toast.LENGTH_SHORT).show();
@@ -98,6 +92,7 @@ public class ModificarActivity extends AppCompatActivity {
                 ContactosContract.ContactoEntry.COLUMNA_TELEFONO,
                 ContactosContract.ContactoEntry.COLUMNA_EDAD,
                 ContactosContract.ContactoEntry.COLUMNA_EMAIL,
+                ContactosContract.ContactoEntry.COLUMNA_CONTACTO,
         };
         Cursor cursor = db.query(ContactosContract.ContactoEntry.NOMBRE_TABLA,
                 columnas,
@@ -123,6 +118,7 @@ public class ModificarActivity extends AppCompatActivity {
             persona.telefono = cursor.getString(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_TELEFONO));
             persona.edad = cursor.getInt(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_EDAD));
             persona.email = cursor.getString(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_EMAIL));
+            persona.contacto = cursor.getInt(cursor.getColumnIndex(ContactosContract.ContactoEntry.COLUMNA_CONTACTO));
 
             personaList.add(persona);
         } while (cursor.moveToNext());
@@ -130,7 +126,7 @@ public class ModificarActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             position = bundle.getInt("Posicion");
-            Persona p = personaList.get(position);
+            p = personaList.get(position);
             idModificar= p.id;
             editTextNombre.setText(p.nombre);
             editTextApellidoPaterno.setText(p.apellidoPaterno);
@@ -138,15 +134,23 @@ public class ModificarActivity extends AppCompatActivity {
             editTextEdad.setText(Integer.toString(p.edad));
             editTextTelefono.setText(p.telefono);
             editTextEmail.setText(p.email);
-
-            cargarSpinner(position);
+            cargarSpinner(p.contacto);
 
             cursor.close();
         }
     }
     private void cargarSpinner(int pos){
         listaSpinner = new ArrayList<String>();
-        listaSpinner.add("Seleccione");
+        if(pos == 0){
+            listaSpinner.add("Seleccione");
+        }else{
+            for (int i = 0; i < personaList.size(); i++){
+                if(pos == personaList.get(i).getId()){
+                    listaSpinner.add(personaList.get(i).getId()+"-"+personaList.get(i).getNombre()+" "+personaList.get(i).getApellidoPaterno());
+                }
+            }
+        }
+
         for (int i = 0; i < personaList.size(); i++) {
             listaSpinner.add(personaList.get(i).getId()+"-"+personaList.get(i).getNombre()+" "+personaList.get(i).getApellidoPaterno());
         }

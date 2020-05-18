@@ -10,18 +10,18 @@ public class BaseDeDatosHelper extends SQLiteOpenHelper {
     public static final int VERSION = 1;
 
     private static final String QUERY_CREACION_TABLA_CONTACTOS =
-            "CREATE TABLE "+ ContactosContract.ContactoEntry.NOMBRE_TABLA+"("
-                    + ContactosContract.ContactoEntry._ID + " INTEGER PRIMARY KEY,"
-                    + ContactosContract.ContactoEntry.COLUMNA_NOMBRE + " TEXT,"
-                    + ContactosContract.ContactoEntry.COLUMNA_APELLIDO_PATERNO + " TEXT,"
-                    + ContactosContract.ContactoEntry.COLUMNA_APELLIDO_MATERNO + " TEXT,"
-                    + ContactosContract.ContactoEntry.COLUMNA_EDAD + " INTEGER,"
-                    + ContactosContract.ContactoEntry.COLUMNA_TELEFONO + " TEXT,"
-                    + ContactosContract.ContactoEntry.COLUMNA_EMAIL + " TEXT,"
-                    + ContactosContract.ContactoEntry.COLUMNA_CONTACTO + "INTERGER);";
+            "CREATE TABLE "+ ContactosContract.ContactoEntry.NOMBRE_TABLA +"("
+                    + ContactosContract.ContactoEntry._ID + " INTEGER PRIMARY KEY ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_NOMBRE + " TEXT ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_APELLIDO_PATERNO + " TEXT ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_APELLIDO_MATERNO + " TEXT ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_EDAD + " INTEGER ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_TELEFONO + " TEXT ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_EMAIL + " TEXT ,"
+                    + ContactosContract.ContactoEntry.COLUMNA_CONTACTO + " INTEGER );";
 
     private static final String QUERY_BORRADO_TABLA_CONTACTOS =
-            "DROP TABLE IF EXISTS "+ ContactosContract.ContactoEntry.NOMBRE_TABLA+";";
+            "DROP TABLE IF EXISTS "+ ContactosContract.ContactoEntry.NOMBRE_TABLA +";";
     public BaseDeDatosHelper(final Context context){
         super(context, NOMBRE_BASEDEDATOS, null, VERSION);
     }
